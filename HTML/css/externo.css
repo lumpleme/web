@@ -1,0 +1,10 @@
+body {background-color: lightgrey}
+p {margin-left: 20px}
+div {font-size: larger;
+    color: red; 
+    text-align: center}
+h1 {color: blue;
+    text-align: center}
+.TextoGrande {font-size: xx-large;
+            background-color: yellow;}
+.Banner {width: 100%}
