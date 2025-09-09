@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from contatos.models import Pessoa
 from django.views.generic.base import View
+from contatos.forms import ContatoModel2Form
+from django.http.response import HttpResponseRedirect
+from django.urls.base import reverse_lazy
 
 # Create your views here.
 
 class ContatoListView(View):
     def get(self, request, *args, **kwargs):
-        pessoas = Pessoa.objects.all()
+        pessoas = Pessoa.objects.all().order_by('nome')
         
         contexto = { 'pessoas': pessoas } # Dicionário que será passado para o template
         # Valor da chave é o objeto com todas as pessoas
@@ -16,3 +19,15 @@ class ContatoListView(View):
             'contatos/listaContatos.html',
             contexto
         )
+
+class ContatoCreateView(View):
+    def get(self, request, *args, **kwargs):
+        contexto = { 'formulario': ContatoModel2Form, }
+        return render(request, "contatos/criaContato.html", contexto)
+
+    def post(self, request, *args, **kwargs):
+        formulario = ContatoModel2Form(request.POST)
+        if formulario.is_valid():
+            contato = formulario.save()
+            contato.save()
+            return HttpResponseRedirect(reverse_lazy("contatos:lista-contatos"))

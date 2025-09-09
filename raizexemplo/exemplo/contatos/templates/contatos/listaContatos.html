@@ -1,0 +1,27 @@
+{% load static %} <!--Sempre que usar statics para CSS, JS ou imagens, lembrar de colocar isso-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Contatos</title>
+    <link rel="stylesheet" href="{% static 'contatos/css/estilo.css' %}">
+    {% include 'contatos/header.html' %}
+</head>
+<body>
+    {% include 'contatos/links.html' %}
+    <h1>Lista de Contatos</h1>
+    <table border="1">
+        <tr><th>Nome</th><th>Idade</th><th>Salário</th><th>Ações disponíveis</th></tr>
+        {% for pessoa in pessoas %} <!-- 'pessoas' vem do contexto no views.py -->
+            <tr>
+                <td>{{ pessoa.nome }}</td><td>{{pessoa.idade }}</td><td>{{ pessoa.salario }}</td>
+                <!--<td><a href="{ url 'contatos:atualiza-contato' pk=pessoa.id %}">Atualizar</a> |
+                    <a href="{ url 'contatos:apaga-contato' pk=pessoa.id %}">Excluir</a></td>-->
+                <td>Sem ações disponíveis texto gigantesco para testar como fica</td>
+            </tr>
+        {% empty %}
+            <tr><th colspan="4">Ainda não tem contatos cadastrados</th></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
