@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from contatos.models import Pessoa
 from django.views.generic.base import View
 from contatos.forms import ContatoModel2Form
@@ -31,3 +31,35 @@ class ContatoCreateView(View):
             contato = formulario.save()
             contato.save()
             return HttpResponseRedirect(reverse_lazy("contatos:lista-contatos"))
+        else:
+            contexto = { 'formulario': formulario, 'mensagem': 'Erro ao salvar o contato!'}
+            return render(request, "contatos/criaContato.html", contexto)
+        
+class ContatoUpdateView(View):
+    def get(self, request, pk, *args, **kwargs):
+        pessoa = Pessoa.objects.get(pk=pk)
+        formulario = ContatoModel2Form(instance=pessoa)
+        contexto = {'pessoa': formulario, }
+        return render(request, 'contatos/atualizaContato.html', contexto)
+
+    def post(self, request, pk, *args, **kwargs):
+        pessoa = get_object_or_404(Pessoa, pk=pk)
+        formulario = ContatoModel2Form(request.POST, instance=pessoa)
+        if formulario.is_valid():
+            pessoa = formulario.save() # atualiza uma pessoa com os dados do formulário
+            pessoa.save() # salva uma pessoa no banco de dados
+            return HttpResponseRedirect(reverse_lazy("contatos:lista-contatos"))
+        else:
+            contexto = {'pessoa': formulario, }
+            return render(request, 'contatos/atualizaContato.html', contexto)
+
+class ContatoDeleteView(View):
+    def get(self, request, pk, *args, **kwargs):
+        pessoa = Pessoa.objects.get(pk=pk)
+        contexto = { 'pessoa': pessoa, }
+        return render(request, 'contatos/apagaContato.html', contexto)
+    
+    def post(self, request, pk, *args, **kwargs):
+        pessoa = Pessoa.objects.get(pk=pk)
+        pessoa.delete()
+        return HttpResponseRedirect(reverse_lazy("contatos:lista-contatos"))
