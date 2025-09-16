@@ -39,7 +39,8 @@ class ContatoUpdateView(View):
     def get(self, request, pk, *args, **kwargs):
         pessoa = Pessoa.objects.get(pk=pk)
         formulario = ContatoModel2Form(instance=pessoa)
-        contexto = {'pessoa': formulario, }
+        contexto = {'pessoa': formulario, 
+                    'titulo': 'Atualiza Contato', }
         return render(request, 'contatos/atualizaContato.html', contexto)
 
     def post(self, request, pk, *args, **kwargs):

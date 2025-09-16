@@ -9,7 +9,7 @@
 </head>
 <body>
     {% include 'contatos/links.html' %}
-    <h1>Atualização de contato</h1>
+    <h1>{{ titulo }}</h1>
     <form method="POST" class='formulario'>
         {% csrf_token %}
         <table>
